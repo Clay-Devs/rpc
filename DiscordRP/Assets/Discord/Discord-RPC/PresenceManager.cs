@@ -119,9 +119,25 @@ namespace DiscordPresence
         void Update()
         {
             DiscordRpc.RunCallbacks();
+            DiscordRpc.Initialize(applicationId, ref handlers, true, optionalSteamId);
         }
 
-        void OnEnable()
+        public void OnEnable()
+        {
+            Debug.Log("Discord: init");
+            callbackCalls = 0;
+
+            handlers = new DiscordRpc.EventHandlers();
+            handlers.readyCallback = ReadyCallback;
+            handlers.disconnectedCallback += DisconnectedCallback;
+            handlers.errorCallback += ErrorCallback;
+            handlers.joinCallback += JoinCallback;
+            handlers.spectateCallback += SpectateCallback;
+            handlers.requestCallback += RequestCallback;
+            DiscordRpc.Initialize(applicationId, ref handlers, true, optionalSteamId);
+        }
+
+        public void ChangeStuff()
         {
             Debug.Log("Discord: init");
             callbackCalls = 0;
